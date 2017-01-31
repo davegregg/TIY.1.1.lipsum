@@ -17,5 +17,4 @@ lipsum_paragraphs.times do
   lipsum_out += lipsum[lipsum_wanted]
 end
 puts "\n" + lipsum_options + lipsum_out
-
 system('echo "' + lipsum_out.gsub(/\"/,'\"') + '"| xclip -selection clipboard')
