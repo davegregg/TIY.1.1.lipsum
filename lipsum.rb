@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+require 'shellwords' # unnecessary if using gsub for escaping the ECHO argument
 
 lipsum_out = String.new
 lipsum_wanted = ARGV[0] ? ARGV[0].downcase : ''
@@ -17,4 +18,12 @@ lipsum_paragraphs.times do
   lipsum_out += lipsum[lipsum_wanted]
 end
 puts "\n" + lipsum_options + lipsum_out
-system('echo "' + lipsum_out.gsub(/\"/,'\"') + '"| xclip -selection clipboard')
+system("echo #{lipsum_out.shellescape} | xclip -selection clipboard")
+=begin
+
+Or...
+  system('echo "' + lipsum_out.gsub(/\"/,'\"') + '"| xclip -selection clipboard')
+
+  The reason the shellescape method wasn't working before was because I had quotation marks around the argument passed to ECHO. It dawned on me that shellescape was escape spaces, like the way people do on the CLI to escape spaces in paths. So obviously for future compatibility (no matter what characters occur in lipsums in the future), but above is the gsub alternative which was indeed working for vanilla text (including quotation marks).
+
+=end
